@@ -61,7 +61,7 @@ Generates a file named `dist/file-2.js`. Declares on this a global named
 `file-2` which equals `Output()`.
 
 
-concatGlobals(rootPath : string , addExports : boolean)
+concatGlobals(rootPath : string , addExports : boolean, fileMapping? : {})
 -------------------------------
 
 Assuming the following project structure:
@@ -73,6 +73,8 @@ Given a "root" script file, concatenates all of its dependencies into a single f
 
 If "addExports == true", includes `exports.<name> = <name>`, where `name` is the "root" file/module name.
 
+With the fileMapping object you may specify a different file name to lookup
+for some module, or to ignore a module (setting the value to false).
 
 Test tools
 ---

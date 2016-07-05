@@ -80,17 +80,19 @@ function addRev() {
 
 
 exports.concatGlobals = concatGlobals;
-function concatGlobals(path, addExports) {
+function concatGlobals(path, addExports, mapping) {
 
     'use strict';
+    var mapping = mapping || {};
     var glob = require('glob');
     var _ = require('lodash');
     var fs = require('fs');
 
+    //string[]
     function findVars(content, key) {
         key = key || 'global'
         content = content.substr(0,1000);
-        return (content.match(new RegExp(`^\\/\\*(\\s*)${key}.*\\*\\/`,'gm'))||[])
+        var out = (content.match(new RegExp(`^\\/\\*(\\s*)${key}.*\\*\\/`,'gm'))||[])
             .map( item => {
                 let line = item
                     .replace(new RegExp(`^\\/\\*(\\s*)${key}`,'g'),'')
@@ -101,18 +103,26 @@ function concatGlobals(path, addExports) {
                 bef = bef.concat(curr);
                 return bef;
             } , [] );
+        console.log('vars ', out, key)
+        return out
     }
 
-    function recursive(varsObj) {
+    function recursive(varsObj, newVars) {
+        (newVars||[]).forEach( newv => {
+            if (!varsObj[newv]) varsObj[newv] = null
+        })
         _(varsObj).keys().forEach( v => {
             if (varsObj[v]) return;
-            let files = glob.sync(`${path}/**/${v}.js`,{ ignore : './node_modules/**'});
+            if (mapping[v] === false) return;
+            var filename = mapping[v] || v + '.js';
+            console.log('find ' + filename)
+            let files = glob.sync(`${path}/**/${filename}`,{ ignore : './node_modules/**'});
             if (!files.length) throw Error('Referência ' + v + ' não encontrada.');
             if (files.length > 1) throw Error('Mais de uma referência a ' + v + ' encontrada');
             var content = fs.readFileSync(files[0], 'utf8');
             varsObj[v] = content;
             var vs = findVars(content);
-            recursive(vs, varsObj);
+            recursive(varsObj, vs);
         })
     }
 
@@ -124,6 +134,7 @@ function concatGlobals(path, addExports) {
                 content += `\nexports.${exp} = ${exp};`;
             })
         }
+        console.log('chunk', chunk.path)
         var vs = findVars(content);
         var mappin = {};
         for (var it in vs) mappin[vs[it]] = null;
