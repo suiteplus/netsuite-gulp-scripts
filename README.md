@@ -94,7 +94,7 @@ then fail);
 
 - Fill up the generated RESTlet id in the gulpfile. Run again.
   
-** Testing lib **
+**Testing lib**
 
  -  Use `require('test-bundle')` in the test script;
  
@@ -161,11 +161,11 @@ Returns to your console:
 OBS: Because `tbundle` is externally included, it isn't shown in the coverage.
 
 
-** noCoverage = true **
+**noCoverage = true**
 
 No coverage, for faster execution and to allow debugging.
 
-** gulp sample **
+**gulp sample**
 
 ```javascript
 runTest({
