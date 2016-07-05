@@ -33,19 +33,6 @@ After the bundling, requires the generated package and exposes it as the file na
 
 Inside the modules, the global scope is exposed as the valiable `GLOBALS`.
 
-concatGlobals(rootPath : string , addExports : boolean)
--------------------------------
-
-Assuming the following project structure:
-
-  - Each file exposes a global variable with the same name as the file name. Each file name is unique;
-  - Each file's dependencies are specified using eslint's `/* global */` tag at the start of the script;
-
-Given a "root" script file, concatenates all of its dependencies into a single file.
-
-If "addExports == true", includes `exports.<name> = <name>`, where `name` is the "root" file/module name.
-
-
 **Example**
 
 ```javascript
@@ -72,6 +59,19 @@ exports = function Output() {
 
 Generates a file named `dist/file-2.js`. Declares on this a global named
 `file-2` which equals `Output()`.
+
+
+concatGlobals(rootPath : string , addExports : boolean)
+-------------------------------
+
+Assuming the following project structure:
+
+  - Each file exposes a global variable with the same name as the file name. Each file name is unique;
+  - Each file's dependencies are specified using eslint's `/* global */` tag at the start of the script;
+
+Given a "root" script file, concatenates all of its dependencies into a single file.
+
+If "addExports == true", includes `exports.<name> = <name>`, where `name` is the "root" file/module name.
 
 
 Test tools
