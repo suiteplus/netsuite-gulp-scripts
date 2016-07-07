@@ -185,7 +185,7 @@ exports.runTest = function( opts ) {
                 cb(null, chunk);
             }))
         if (opts.destFilename) strm = strm.pipe(rename(opts.destFilename))
-        strm = strm.pipe(nscabinet({ rootPath : opts.destPath }) )
+        strm = strm.pipe(nscabinet({ rootPath : opts.destPath, flatten : true }) )
             .pipe(rename('generated.js'))
             .pipe(gulp.dest('.gscripts'))
             .on('finish' , () => {
