@@ -1,4 +1,4 @@
-/* eslint-env es6 */
+/* eslint-env es6, node */
 var through = require('through2');
 
 function toArray( inp ) {
@@ -160,6 +160,7 @@ exports.runTest = function( opts ) {
     var istanbul = require('istanbul')
     var nscabinet = require('nscabinet')
     var callRestlet = require('call-restlet')
+    var nsconfig = require('nsconfig')
     var rename = require('gulp-rename')
     var fs = require('fs')
 
@@ -170,6 +171,13 @@ exports.runTest = function( opts ) {
             .pipe(addGlobals())
             .pipe(through.obj(function each(chunk, enc, cb){
                 if (chunk.isDirectory()) return cb(null,chunk);
+                if (opts.addAuthstring) {
+                    let params = nsconfig()
+                    let nlauthRolePortion = ( params.role ) ? `,nlauth_role=${params.role}` : '';
+                    let authstr = `NLAuth nlauth_account=${params.account},nlauth_email=${params.email},nlauth_signature=${params.password}${nlauthRolePortion}`
+                    chunk.contents = new Buffer( String(chunk.contents) + 
+                        '\nGLOBALS.AUTH_HEADER = "' + authstr + '";\nGLOBALS.NS_REALM = "' + params.realm + '";' )
+                }
                 if (opts.noCoverage) return cb(null, chunk);
                 //sem o embedSource = true temos problemas na geração do relatório
                 var istrumenter = new istanbul.Instrumenter({ embedSource : true });
