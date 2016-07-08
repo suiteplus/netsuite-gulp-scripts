@@ -81,6 +81,7 @@ var mapping = {
   moduleName1 : 'module.js' //looks for **/module.js
   moduleName2 : './path1/**/module2.js' //searches this glob, concats all the files found
 }
+```
 
 Test tools
 ---
