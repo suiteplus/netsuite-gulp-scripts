@@ -115,11 +115,17 @@ function concatGlobals(path, addExports, mapping) {
             if (varsObj[v]) return;
             if (mapping[v] === false) return;
             var filename = mapping[v] || v + '.js';
-            console.log('find ' + filename)
-            let files = glob.sync(`${path}/**/${filename}`,{ ignore : './node_modules/**'});
+            var findstr;
+            if (filename.charAt(0) != '.') findstr = `${path}/**/${filename}`;
+            else findstr = filename;
+            console.log('find ',findstr)
+            let files = glob.sync(findstr,{ ignore : './node_modules/**'});
             if (!files.length) throw Error('Referência ' + v + ' não encontrada.');
-            if (files.length > 1) throw Error('Mais de uma referência a ' + v + ' encontrada');
-            var content = fs.readFileSync(files[0], 'utf8');
+            if (files.length > 1 && filename.charAt(0) != '.')
+                throw Error('Mais de uma referência a ' + v + ' encontrada');
+            var content = files.reduce( (bef, curr) => { 
+                return bef + fs.readFileSync(curr, 'utf8')
+            } , '')
             varsObj[v] = content;
             var vs = findVars(content);
             recursive(varsObj, vs);

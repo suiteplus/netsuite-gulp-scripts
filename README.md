@@ -74,7 +74,13 @@ Given a "root" script file, concatenates all of its dependencies into a single f
 If "addExports == true", includes `exports.<name> = <name>`, where `name` is the "root" file/module name.
 
 With the fileMapping object you may specify a different file name to lookup
-for some module, or to ignore a module (setting the value to false).
+for some module, or to ignore a module (setting the value to false). Ex:
+
+```javascript
+var mapping = {
+  moduleName1 : 'module.js' //looks for **/module.js
+  moduleName2 : './path1/**/module2.js' //searches this glob, concats all the files found
+}
 
 Test tools
 ---
