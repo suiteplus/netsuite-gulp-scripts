@@ -88,20 +88,20 @@ Test tools
 
 **runTest({ localPath , destPath, destFilename? , scriptId , noCoverage? }) : Promise**
 
-Test netsuite server scripts (mostly restlets)
+Test netsuite server scripts (mostly restlets). Getting started (1st run):
  
-- Write your test in _localPath_ using the provided tool (below); Export the function `Tester::run`;
+1. Write your test in _localPath_ using the provided tool (below); Export the function `Tester::run`;
 
-- Set up nscabinet for file upload (nsconfig.json + script)
+2. Set up nscabinet for file upload (nsconfig.json + script)
 
-- Create the gulp task without the script id; Run it once so the file is uploaded (the script will
+3. Create the gulp task without the script id; Run it once so the file is uploaded (the script will
 then fail);
 
-- Create a RESTlet, using as script file the recently uploaded file;
+4. Create a RESTlet, using as script file the recently uploaded file;
   Add `dist/test-bundle.js` from this repo as library;
   Add the exported `Tester#run()` function as POST function;
 
-- Fill up the generated RESTlet id in the gulpfile. Run again.
+5. Fill up the generated RESTlet id in the gulpfile. Run again.
   
 **Testing lib**
 
