@@ -114,7 +114,7 @@ then fail);
  - `test_bundle.write(filename, contents)` writes custom debugging content into your local
    path after the script is run.
 
- - `console.log` outputs into your local console afer the test is run
+ - `console.log` outputs into your local console afer the test is run. Accepts many arguments and objects are stringified.
 
  - `console.$stackTrace(err)` gets a stack trace from a JS error object or a nlobjError 
    
